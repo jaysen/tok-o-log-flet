@@ -17,6 +17,7 @@ from tokolog_flet.config import (
     open_in_editor,
 )
 from tokolog_flet.session import COUNTDOWN, STOPWATCH, Session, under_way
+from tokolog_flet.sound import play as play_sound
 from tokolog_flet.state import load_last_profile, save_last_profile
 from tokolog_flet.timer import State
 
@@ -165,6 +166,9 @@ def main(page: ft.Page, config: Config, config_error: str = "") -> None:
         finally:
             ticking = False
         render()
+        # Only a running countdown finishes, so the loop is where to catch it.
+        if session.timer.state is State.FINISHED and (sound := session.profile.finish_sound):
+            play_sound(sound)
 
     async def on_time_click(_: ft.TapEvent[ft.GestureDetector]) -> None:
         if not session.can_set_time():
