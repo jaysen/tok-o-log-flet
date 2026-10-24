@@ -27,6 +27,7 @@ from tokolog_flet.log import (
     MODES,
     template_error,
 )
+from tokolog_flet.sound import FINISH_SOUND
 
 DEFAULT_MINUTES = 25
 # A profile's mode when it allows both; also how a profile undoes the default's mode.
@@ -62,6 +63,8 @@ class Profile:
     log_line_format: str = DEFAULT_LINE_FORMAT
     # Lines for particular events or modes, as EventLog.lines; the rest use log_line_format.
     log_lines: dict[str, str] = field(default_factory=dict, hash=False)
+    # Played when a countdown finishes; None for silence.
+    finish_sound: Path | None = FINISH_SOUND
 
     @property
     def default_seconds(self) -> float:
@@ -196,6 +199,19 @@ def _parse_profile(table: dict[str, Any], base: Profile, name: str, path: Path) 
     _check_template(line_format, f"{prefix}line_format", LINE_PLACEHOLDERS, path)
     lines = _parse_lines(table, base, prefix, path)
 
+    sound = table.get("finish_sound")
+    if sound is None:
+        finish_sound = base.finish_sound
+    elif sound is True:
+        finish_sound = FINISH_SOUND
+    elif sound is False:
+        finish_sound = None
+    elif isinstance(sound, str) and sound:
+        # Relative paths are taken from the config file's folder, like folder.
+        finish_sound = path.parent / Path(sound).expanduser()
+    else:
+        raise ConfigError(f"{path}: {prefix}finish_sound must be true, false or a file path")
+
     return Profile(
         default_minutes=minutes,
         default_label=label.strip(),
@@ -206,6 +222,7 @@ def _parse_profile(table: dict[str, Any], base: Profile, name: str, path: Path) 
         log_time_format=time_format,
         log_line_format=line_format,
         log_lines=lines,
+        finish_sound=finish_sound,
     )
 
 

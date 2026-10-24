@@ -14,6 +14,9 @@ default_minutes = 25
 # The only mode the profile allows: "countdown" or "stopwatch". The app switches to it
 # and locks the mode switch. "any" allows both.
 # mode = "any"
+# Sound when a countdown finishes: true for the built-in chime, false for none, or a
+# .wav file ("~" is expanded, relative paths are taken from this file's folder).
+# finish_sound = true
 
 # Folder for the daily activity logs. "~" is expanded and relative
 # paths are taken from this file's folder. Default: ~/.local/share/tokolog-flet/log

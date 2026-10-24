@@ -160,6 +160,10 @@ A profile with a `mode` switches to it and locks the Timer/Stopwatch switch.
 running or paused when the mode changes, e.g. after editing the config, it switches once
 that timer is stopped.
 
+A countdown plays a chime when it finishes. `finish_sound = false` silences it, and a
+path to a `.wav` file plays that instead. It uses the system's player: `pw-play`,
+`paplay` or `aplay` on Linux, `afplay` on macOS.
+
 For example, a pomodoro profile: 25-minute focus blocks, timer only, with a line for each
 block started, finished or given up, and pauses left out:
 
