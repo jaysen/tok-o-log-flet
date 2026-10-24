@@ -250,6 +250,7 @@ def test_lines(tmp_path: Path) -> None:
             'pause = ""\n'
             '"countdown.start" = "{timer_minutes}m"\n'
             '"countdown.stop" = "{timer_clock} left"\n'
+            'resume = "{elapsed_hours}h elapsed"\n'
             'stopwatch.finish = "done"\n'  # unquoted: a nested table in TOML
             "[profiles.focus]\n"
             '[profiles.work]\nline_format = "{event}"\n'
@@ -261,6 +262,7 @@ def test_lines(tmp_path: Path) -> None:
         "pause": "",
         "countdown.start": "{timer_minutes}m",
         "countdown.stop": "{timer_clock} left",
+        "resume": "{elapsed_hours}h elapsed",
         "stopwatch.finish": "done",
     }
     assert Config().log_lines == {}

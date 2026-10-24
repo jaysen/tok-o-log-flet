@@ -96,6 +96,7 @@ line_format = "- {time} {mode} {event} {display}"
 | `{date}`, `{time}` | when the event happened, in `date_format` / `time_format` |
 | `{mode}`, `{event}` | `countdown` or `stopwatch`; `start`, `pause`, `resume`, `stop` or `finish` |
 | `{elapsed}` | time run so far, pauses left out |
+| `{elapsed_hours}` | elapsed time as decimal hours, e.g. `1.5` |
 | `{display}` | what the timer showed, so time left for a countdown |
 | `{label}` | the label typed in the app, else the profile's `default_label`, else the mode |
 | `{profile}` | the profile picked in the app |

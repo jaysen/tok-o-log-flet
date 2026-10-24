@@ -284,6 +284,24 @@ def test_timer_placeholders(tmp_path: Path, clock: FakeClock) -> None:
     ]
 
 
+def test_elapsed_hours_placeholder(tmp_path: Path, clock: FakeClock) -> None:
+    log = EventLog(
+        tmp_path,
+        line_format="{event} {elapsed} {elapsed_hours}",
+        now=lambda: datetime(2026, 10, 21, 9, 30, 5),
+    )
+    s = Stopwatch(clock)
+    s.start()
+    log.update("stopwatch", s)
+    clock.now = 5400
+    s.stop()
+    log.update("stopwatch", s)
+    assert lines(tmp_path) == [
+        "start 00:00 0",
+        "stop 1:30:00 1.5",
+    ]
+
+
 def test_session_placeholders(tmp_path: Path, clock: FakeClock) -> None:
     # The wall clock moves with the timer clock, from 09:30:00.
     log = EventLog(
