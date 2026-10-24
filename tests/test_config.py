@@ -251,6 +251,7 @@ def test_lines(tmp_path: Path) -> None:
             'pause = ""\n'
             '"countdown.start" = "{timer_minutes}m"\n'
             '"countdown.stop" = "{timer_clock} left"\n'
+            '"countdown.pause" = "{elapsed_minutes}m elapsed"\n'
             'resume = "{elapsed_hours}h elapsed"\n'
             'stopwatch.finish = "done"\n'  # unquoted: a nested table in TOML
             "[profiles.focus]\n"
@@ -263,6 +264,7 @@ def test_lines(tmp_path: Path) -> None:
         "pause": "",
         "countdown.start": "{timer_minutes}m",
         "countdown.stop": "{timer_clock} left",
+        "countdown.pause": "{elapsed_minutes}m elapsed",
         "resume": "{elapsed_hours}h elapsed",
         "stopwatch.finish": "done",
     }

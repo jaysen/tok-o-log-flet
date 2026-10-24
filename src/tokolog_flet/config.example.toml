@@ -33,10 +33,11 @@ default_minutes = 25
 # (AM or PM) are replaced, e.g. "hh:mm AM" -> 02:05 PM.
 # time_format = "HH:mm:ss"
 # One line per event.
-# Placeholders: {date} {time} {mode} {event} {elapsed} {elapsed_hours} {display} {label} {profile}
+# Placeholders: {date} {time} {mode} {event} {elapsed} {elapsed_minutes} {elapsed_hours} {display} {label} {profile}
 #               {timer_minutes} {timer_clock} {timer_remaining} {started} {since_start} {paused}
 #   event:   start, pause, resume, stop or finish
-#   elapsed: time run so far, pauses left out
+#   elapsed: time run so far, pauses left out (MM:SS / H:MM:SS; not time_format)
+#   elapsed_minutes: elapsed as decimal minutes, e.g. 90
 #   elapsed_hours: elapsed as decimal hours, e.g. 1.5
 #   display: what the timer showed (countdown: time left)
 #   label:   the label typed in the app, else default_label, else the mode
