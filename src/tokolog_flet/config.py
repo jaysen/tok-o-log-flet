@@ -65,6 +65,8 @@ class Profile:
     log_lines: dict[str, str] = field(default_factory=dict, hash=False)
     # Played when a countdown finishes; None for silence.
     finish_sound: Path | None = FINISH_SOUND
+    # How long to keep repeating the finish sound; 0 plays it once.
+    finish_sound_seconds: float = 0
 
     @property
     def default_seconds(self) -> float:
@@ -217,6 +219,10 @@ def _parse_profile(table: dict[str, Any], base: Profile, name: str, path: Path) 
             f"or one of {', '.join(SOUND_NAMES)}"
         )
 
+    repeat = table.get("finish_sound_seconds", base.finish_sound_seconds)
+    if isinstance(repeat, bool) or not isinstance(repeat, int | float) or repeat < 0:
+        raise ConfigError(f"{path}: {prefix}finish_sound_seconds must be a number, 0 or more")
+
     return Profile(
         default_minutes=minutes,
         default_label=label.strip(),
@@ -228,6 +234,7 @@ def _parse_profile(table: dict[str, Any], base: Profile, name: str, path: Path) 
         log_line_format=line_format,
         log_lines=lines,
         finish_sound=finish_sound,
+        finish_sound_seconds=repeat,
     )
 
 

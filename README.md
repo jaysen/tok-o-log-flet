@@ -163,7 +163,8 @@ that timer is stopped.
 
 A countdown plays a chime when it finishes. `finish_sound` picks another built-in sound
 (`"chime"`, `"bell"`, `"ding"`, `"beep"`, `"alarm"` or `"gong"`) or a path to a `.wav`
-file; `false` silences it. It uses the system's player: `pw-play`,
+file; `false` silences it. `finish_sound_seconds = 30` repeats it for 30 seconds, or until
+Reset; the default, 0, plays it once. It uses the system's player: `pw-play`,
 `paplay` or `aplay` on Linux, `afplay` on macOS.
 
 For example, a pomodoro profile: 25-minute focus blocks, timer only, with a line for each

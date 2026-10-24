@@ -18,6 +18,8 @@ default_minutes = 25
 # "alarm" or "gong"), a .wav file ("~" is expanded, relative paths are taken from this
 # file's folder), true for the chime or false for none.
 # finish_sound = true
+# Seconds to keep repeating the sound, e.g. 30; Reset stops it sooner. 0 plays it once.
+# finish_sound_seconds = 0
 
 # Folder for the daily activity logs. "~" is expanded and relative
 # paths are taken from this file's folder. Default: ~/.local/share/tokolog-flet/log
