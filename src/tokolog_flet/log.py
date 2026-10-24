@@ -40,6 +40,7 @@ LINE_PLACEHOLDERS = (
     "label",
     "profile",
     "timer_minutes",
+    "timer_clock",
     "timer_remaining",
     "started",
     "since_start",
@@ -191,6 +192,8 @@ class EventLog:
             profile=self.profile,
             # Minutes as a plain number, like default_minutes: 25, or 1.5 for 1:30.
             timer_minutes=f"{timer.duration / 60:g}" if countdown else "",
+            # Duration in timer display format, e.g. 25:00 or 1:30:00.
+            timer_clock=format_seconds(timer.duration) if countdown else "",
             timer_remaining=display if countdown else "",
             started=format_time(self.time_format, started) if started else "",
             since_start=format_seconds(since) if since is not None else "",

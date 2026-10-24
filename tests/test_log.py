@@ -265,7 +265,7 @@ def test_profile_in_line_and_file(tmp_path: Path, clock: FakeClock) -> None:
 def test_timer_placeholders(tmp_path: Path, clock: FakeClock) -> None:
     log = EventLog(
         tmp_path,
-        line_format="{mode} {event} [{timer_minutes}] [{timer_remaining}]",
+        line_format="{mode} {event} [{timer_minutes}] [{timer_clock}] [{timer_remaining}]",
         now=lambda: datetime(2026, 10, 21, 9, 30, 5),
     )
     c, s = Countdown(90, clock), Stopwatch(clock)
@@ -278,9 +278,9 @@ def test_timer_placeholders(tmp_path: Path, clock: FakeClock) -> None:
     s.start()
     log.update("stopwatch", s)
     assert lines(tmp_path) == [
-        "countdown start [1.5] [01:30]",
-        "countdown stop [1.5] [01:00]",  # time left when stopped, not after the reset
-        "stopwatch start [] []",
+        "countdown start [1.5] [01:30] [01:30]",
+        "countdown stop [1.5] [01:30] [01:00]",  # time left when stopped, not after the reset
+        "stopwatch start [] [] []",
     ]
 
 

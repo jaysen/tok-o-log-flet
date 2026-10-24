@@ -30,13 +30,14 @@ default_minutes = 25
 # time_format = "HH:mm:ss"
 # One line per event.
 # Placeholders: {date} {time} {mode} {event} {elapsed} {display} {label} {profile}
-#               {timer_minutes} {timer_remaining} {started} {since_start} {paused}
+#               {timer_minutes} {timer_clock} {timer_remaining} {started} {since_start} {paused}
 #   event:   start, pause, resume, stop or finish
 #   elapsed: time run so far, pauses left out
 #   display: what the timer showed (countdown: time left)
 #   label:   the label typed in the app, else default_label, else the mode
 #   profile: the profile picked in the app ("default" if none)
 #   timer_minutes:   the countdown's length in minutes, e.g. 25 (blank for a stopwatch)
+#   timer_clock:     the countdown's length in clock format, e.g. 25:00 (blank for a stopwatch)
 #   timer_remaining: the countdown's time left (blank for a stopwatch)
 #   started:     clock time the session started, in time_format
 #   since_start: time since the start, pauses included
