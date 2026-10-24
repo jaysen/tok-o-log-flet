@@ -27,7 +27,7 @@ from tokolog_flet.log import (
     MODES,
     template_error,
 )
-from tokolog_flet.sound import FINISH_SOUND
+from tokolog_flet.sound import FINISH_SOUND, SOUND_NAMES, builtin_sound
 
 DEFAULT_MINUTES = 25
 # A profile's mode when it allows both; also how a profile undoes the default's mode.
@@ -206,11 +206,16 @@ def _parse_profile(table: dict[str, Any], base: Profile, name: str, path: Path) 
         finish_sound = FINISH_SOUND
     elif sound is False:
         finish_sound = None
+    elif sound in SOUND_NAMES:
+        finish_sound = builtin_sound(sound)
     elif isinstance(sound, str) and sound:
         # Relative paths are taken from the config file's folder, like folder.
         finish_sound = path.parent / Path(sound).expanduser()
     else:
-        raise ConfigError(f"{path}: {prefix}finish_sound must be true, false or a file path")
+        raise ConfigError(
+            f"{path}: {prefix}finish_sound must be true, false, a .wav file "
+            f"or one of {', '.join(SOUND_NAMES)}"
+        )
 
     return Profile(
         default_minutes=minutes,

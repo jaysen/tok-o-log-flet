@@ -7,10 +7,16 @@ import sys
 from importlib.resources import files
 from pathlib import Path
 
-# A short chime; ships inside the package.
-FINISH_SOUND = Path(str(files("tokolog_flet") / "finish.wav"))
+# Built-in sounds, picked by name in the config; they ship inside the package.
+SOUNDS_FOLDER = Path(str(files("tokolog_flet") / "sounds"))
+SOUND_NAMES = ("chime", "bell", "ding", "beep", "alarm", "gong")
+FINISH_SOUND = SOUNDS_FOLDER / "chime.wav"
 # Tried in order on Linux and other Unixes: PipeWire, PulseAudio, then ALSA.
 UNIX_PLAYERS = ("pw-play", "paplay", "aplay")
+
+
+def builtin_sound(name: str) -> Path:
+    return SOUNDS_FOLDER / f"{name}.wav"
 
 
 def play(path: Path) -> None:

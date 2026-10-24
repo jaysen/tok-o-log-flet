@@ -14,7 +14,7 @@ from tokolog_flet.config import (
     parse_config,
     read_settings,
 )
-from tokolog_flet.sound import FINISH_SOUND
+from tokolog_flet.sound import FINISH_SOUND, SOUND_NAMES, builtin_sound
 
 
 def write(tmp_path: Path, text: str) -> Path:
@@ -355,3 +355,10 @@ def test_finish_sound_path_is_relative_to_config(tmp_path: Path) -> None:
 def test_rejects_invalid_finish_sound(tmp_path: Path, value: str) -> None:
     with pytest.raises(ConfigError, match=r"profiles\.default\.finish_sound"):
         load_config(write(tmp_path, f"[profiles.default]\nfinish_sound = {value}\n"))
+
+
+@pytest.mark.parametrize("name", SOUND_NAMES)
+def test_finish_sound_picks_a_builtin_by_name(tmp_path: Path, name: str) -> None:
+    config = load_config(write(tmp_path, f'[profiles.default]\nfinish_sound = "{name}"\n'))
+    assert config.finish_sound == builtin_sound(name)
+    assert builtin_sound(name).is_file()
