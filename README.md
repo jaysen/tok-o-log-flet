@@ -96,10 +96,12 @@ line_format = "- {time} {mode} {event} {display}"
 | `{date}`, `{time}` | when the event happened, in `date_format` / `time_format` |
 | `{mode}`, `{event}` | `countdown` or `stopwatch`; `start`, `pause`, `resume`, `stop` or `finish` |
 | `{elapsed}` | time run so far, pauses left out |
+| `{elapsed_hours}` | elapsed time as decimal hours, e.g. `1.5` |
 | `{display}` | what the timer showed, so time left for a countdown |
 | `{label}` | the label typed in the app, else the profile's `default_label`, else the mode |
 | `{profile}` | the profile picked in the app |
 | `{timer_minutes}` | the countdown's length in minutes, e.g. `25` (blank for a stopwatch) |
+| `{timer_clock}` | the countdown's length in timer format, e.g. `25:00` (blank for a stopwatch) |
 | `{timer_remaining}` | the countdown's time left (blank for a stopwatch) |
 | `{started}` | clock time the session started, in `time_format` |
 | `{since_start}` | time since the start, pauses included |
