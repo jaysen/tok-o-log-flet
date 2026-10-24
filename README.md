@@ -9,6 +9,8 @@ In my case, I use this for task tracking in journals and project notes within my
 - **Flexible countdown input** (`25`, `1:30`, `1:00:00`, `1h30m`) and inline editing.
 - **Start / pause / resume / stop / reset flow** with elapsed/display time tracking. Stop
   ends the run but keeps its time on show; Reset then clears it.
+- **Finish sound** when a countdown ends: six built-in chimes and alarms or your own
+  `.wav`, set per profile, optionally repeating for a set time.
 - **Compact view toggle** for a minimal always-visible timer window.
 - **Editable label** per session, used in log output.
 - **Named profiles**, each with its own log file, line formats, countdown default, label
@@ -95,7 +97,8 @@ line_format = "- {time} {mode} {event} {display}"
 | --- | --- |
 | `{date}`, `{time}` | when the event happened, in `date_format` / `time_format` |
 | `{mode}`, `{event}` | `countdown` or `stopwatch`; `start`, `pause`, `resume`, `stop` or `finish` |
-| `{elapsed}` | time run so far, pauses left out |
+| `{elapsed}` | time run so far, pauses left out (`MM:SS` / `H:MM:SS`; not affected by `time_format`) |
+| `{elapsed_minutes}` | elapsed time as decimal minutes, e.g. `90` |
 | `{elapsed_hours}` | elapsed time as decimal hours, e.g. `1.5` |
 | `{display}` | what the timer showed, so time left for a countdown |
 | `{label}` | the label typed in the app, else the profile's `default_label`, else the mode |
@@ -160,11 +163,6 @@ A profile with a `mode` switches to it and locks the Timer/Stopwatch switch.
 running or paused when the mode changes, e.g. after editing the config, it switches once
 that timer is stopped.
 
-A countdown plays a chime when it finishes. `finish_sound` picks another built-in sound
-(`"chime"`, `"bell"`, `"ding"`, `"beep"`, `"alarm"` or `"gong"`) or a path to a `.wav`
-file; `false` silences it. It uses the system's player: `pw-play`,
-`paplay` or `aplay` on Linux, `afplay` on macOS.
-
 For example, a pomodoro profile: 25-minute focus blocks, timer only, with a line for each
 block started, finished or given up, and pauses left out:
 
@@ -192,6 +190,34 @@ which logs, for one finished block and one cut short:
 - 09:30 🍅 report
 - 09:41 🍅 ✗ report: gave up with 14:00 left
 ```
+
+### Finish sound
+
+A countdown plays a chime when it finishes. `finish_sound` picks another, in any profile:
+
+```toml
+[profiles.pomodoro]
+finish_sound = "chime"    # three rising soft notes; the default, same as true
+# finish_sound = "bell"   # two bell strikes
+# finish_sound = "ding"   # a short, bright two-note ding
+# finish_sound = "beep"   # three plain digital beeps
+# finish_sound = "alarm"  # a fast two-tone alarm, the hardest to miss
+# finish_sound = "gong"   # one long, low gong
+# finish_sound = "~/sounds/done.wav"  # your own .wav file
+# finish_sound = false    # no sound
+```
+
+The sound plays once unless `finish_sound_seconds` says how long to keep repeating it.
+Reset, Start or switching to the stopwatch stops it sooner:
+
+```toml
+[profiles.pomodoro]
+finish_sound = "alarm"
+finish_sound_seconds = 30   # repeat for 30 seconds; 0, the default, plays it once
+```
+
+A relative path is taken from the config file's folder. Sounds play through the
+system's player: `pw-play`, `paplay` or `aplay` on Linux, `afplay` on macOS.
 
 The app reopens on the profile picked last, which it remembers in
 `~/.local/state/tokolog-flet/state.json`. [config.example.toml](src/tokolog_flet/config.example.toml)

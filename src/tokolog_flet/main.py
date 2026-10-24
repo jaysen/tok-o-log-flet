@@ -1,6 +1,7 @@
 """Flet UI entry point. Keep this thin: behaviour lives in session.py and timer.py."""
 
 import asyncio
+import time
 from functools import partial
 from pathlib import Path
 
@@ -18,6 +19,8 @@ from tokolog_flet.config import (
 )
 from tokolog_flet.session import COUNTDOWN, STOPWATCH, Session, under_way
 from tokolog_flet.sound import play as play_sound
+from tokolog_flet.sound import sound_seconds
+from tokolog_flet.sound import stop as stop_sound
 from tokolog_flet.state import load_last_profile, save_last_profile
 from tokolog_flet.timer import State
 
@@ -168,7 +171,23 @@ def main(page: ft.Page, config: Config, config_error: str = "") -> None:
         render()
         # Only a running countdown finishes, so the loop is where to catch it.
         if session.timer.state is State.FINISHED and (sound := session.profile.finish_sound):
-            play_sound(sound)
+            await alert(sound, session.profile.finish_sound_seconds)
+
+    async def alert(sound: Path, seconds: float) -> None:
+        # Repeats the sound for `seconds`, at least once, until Reset or Start ends it.
+        timer = session.timer
+        length = sound_seconds(sound)
+        end = time.monotonic() + seconds
+        while True:
+            player = play_sound(sound)
+            done = time.monotonic() + length
+            while time.monotonic() < done:
+                if timer is not session.timer or timer.state is not State.FINISHED:
+                    stop_sound(player)
+                    return
+                await asyncio.sleep(TICK_SECONDS)
+            if time.monotonic() >= end:
+                return
 
     async def on_time_click(_: ft.TapEvent[ft.GestureDetector]) -> None:
         if not session.can_set_time():

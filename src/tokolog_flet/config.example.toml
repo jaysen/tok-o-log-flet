@@ -14,10 +14,18 @@ default_minutes = 25
 # The only mode the profile allows: "countdown" or "stopwatch". The app switches to it
 # and locks the mode switch. "any" allows both.
 # mode = "any"
-# Sound when a countdown finishes: a built-in one ("chime", "bell", "ding", "beep",
-# "alarm" or "gong"), a .wav file ("~" is expanded, relative paths are taken from this
-# file's folder), true for the chime or false for none.
-# finish_sound = true
+# Sound when a countdown finishes: a built-in one, a .wav file ("~" is expanded,
+# relative paths are taken from this file's folder), true for the chime or false for none.
+# finish_sound = "chime"    # three rising soft notes; the default, same as true
+# finish_sound = "bell"     # two bell strikes
+# finish_sound = "ding"     # a short, bright two-note ding
+# finish_sound = "beep"     # three plain digital beeps
+# finish_sound = "alarm"    # a fast two-tone alarm, the hardest to miss
+# finish_sound = "gong"     # one long, low gong
+# finish_sound = "~/sounds/done.wav"
+# finish_sound = false
+# Seconds to keep repeating the sound, e.g. 30; Reset stops it sooner. 0 plays it once.
+# finish_sound_seconds = 0
 
 # Folder for the daily activity logs. "~" is expanded and relative
 # paths are taken from this file's folder. Default: ~/.local/share/tokolog-flet/log
@@ -33,10 +41,11 @@ default_minutes = 25
 # (AM or PM) are replaced, e.g. "hh:mm AM" -> 02:05 PM.
 # time_format = "HH:mm:ss"
 # One line per event.
-# Placeholders: {date} {time} {mode} {event} {elapsed} {elapsed_hours} {display} {label} {profile}
+# Placeholders: {date} {time} {mode} {event} {elapsed} {elapsed_minutes} {elapsed_hours} {display} {label} {profile}
 #               {timer_minutes} {timer_clock} {timer_remaining} {started} {since_start} {paused}
 #   event:   start, pause, resume, stop or finish
-#   elapsed: time run so far, pauses left out
+#   elapsed: time run so far, pauses left out (MM:SS / H:MM:SS; not time_format)
+#   elapsed_minutes: elapsed as decimal minutes, e.g. 90
 #   elapsed_hours: elapsed as decimal hours, e.g. 1.5
 #   display: what the timer showed (countdown: time left)
 #   label:   the label typed in the app, else default_label, else the mode
@@ -99,10 +108,13 @@ default_minutes = 25
 # stop   = "{date},{started},{time},{label},{elapsed},{paused}"
 # finish = "{date},{started},{time},{label},{elapsed},{paused}"
 
-# Pomodoro: 25-minute focus blocks, timer only; pauses aren't logged.
+# Pomodoro: 25-minute focus blocks, timer only; pauses aren't logged. The alarm rings
+# for 30 seconds at the end of a block, or until Reset.
 # [profiles.pomodoro]
 # mode = "countdown"
 # default_minutes = 25
+# finish_sound = "alarm"
+# finish_sound_seconds = 30
 # default_label = "focus"
 # time_format = "HH:mm"
 # line_format = "- {time} {event} {label} {elapsed}"

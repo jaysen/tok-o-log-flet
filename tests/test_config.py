@@ -14,7 +14,7 @@ from tokolog_flet.config import (
     parse_config,
     read_settings,
 )
-from tokolog_flet.sound import FINISH_SOUND, SOUND_NAMES, builtin_sound
+from tokolog_flet.sound import FINISH_SOUND, SOUND_NAMES, builtin_sound, sound_seconds
 
 
 def write(tmp_path: Path, text: str) -> Path:
@@ -251,6 +251,7 @@ def test_lines(tmp_path: Path) -> None:
             'pause = ""\n'
             '"countdown.start" = "{timer_minutes}m"\n'
             '"countdown.stop" = "{timer_clock} left"\n'
+            '"countdown.pause" = "{elapsed_minutes}m elapsed"\n'
             'resume = "{elapsed_hours}h elapsed"\n'
             'stopwatch.finish = "done"\n'  # unquoted: a nested table in TOML
             "[profiles.focus]\n"
@@ -263,6 +264,7 @@ def test_lines(tmp_path: Path) -> None:
         "pause": "",
         "countdown.start": "{timer_minutes}m",
         "countdown.stop": "{timer_clock} left",
+        "countdown.pause": "{elapsed_minutes}m elapsed",
         "resume": "{elapsed_hours}h elapsed",
         "stopwatch.finish": "done",
     }
@@ -362,3 +364,23 @@ def test_finish_sound_picks_a_builtin_by_name(tmp_path: Path, name: str) -> None
     config = load_config(write(tmp_path, f'[profiles.default]\nfinish_sound = "{name}"\n'))
     assert config.finish_sound == builtin_sound(name)
     assert builtin_sound(name).is_file()
+
+
+def test_finish_sound_seconds_is_inherited(tmp_path: Path) -> None:
+    config = load_config(
+        write(tmp_path, "[profiles.default]\nfinish_sound_seconds = 30\n[profiles.other]\n")
+    )
+    assert config.finish_sound_seconds == 30
+    assert config.profile("other").finish_sound_seconds == 30
+    assert Config().finish_sound_seconds == 0
+
+
+@pytest.mark.parametrize("value", ["-1", '"30"', "true"])
+def test_rejects_invalid_finish_sound_seconds(tmp_path: Path, value: str) -> None:
+    with pytest.raises(ConfigError, match=r"profiles\.default\.finish_sound_seconds"):
+        load_config(write(tmp_path, f"[profiles.default]\nfinish_sound_seconds = {value}\n"))
+
+
+def test_sound_seconds_reads_wav_length(tmp_path: Path) -> None:
+    assert sound_seconds(builtin_sound("chime")) == pytest.approx(1.6, abs=0.01)
+    assert sound_seconds(tmp_path / "missing.wav") == 1.0
