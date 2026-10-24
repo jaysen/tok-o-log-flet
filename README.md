@@ -9,6 +9,8 @@ In my case, I use this for task tracking in journals and project notes within my
 - **Flexible countdown input** (`25`, `1:30`, `1:00:00`, `1h30m`) and inline editing.
 - **Start / pause / resume / stop / reset flow** with elapsed/display time tracking. Stop
   ends the run but keeps its time on show; Reset then clears it.
+- **Finish sound** when a countdown ends: six built-in chimes and alarms or your own
+  `.wav`, set per profile, optionally repeating for a set time.
 - **Compact view toggle** for a minimal always-visible timer window.
 - **Editable label** per session, used in log output.
 - **Named profiles**, each with its own log file, line formats, countdown default, label
